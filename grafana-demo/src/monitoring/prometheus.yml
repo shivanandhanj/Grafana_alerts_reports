@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 15s
+
+rule_files:
+  - "alert_rules.yml"
+
+scrape_configs:
+  - job_name: 'textile-node-app'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['172.17.0.1:5000'] # Replace PORT with your Node.js port (e.g., 5000)

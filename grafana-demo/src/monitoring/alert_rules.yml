@@ -1,0 +1,34 @@
+groups:
+  - name: ecommerce-alerts
+    rules:
+      - alert: NoOrdersIn15Min
+        expr: rate(ecommerce_orders_placed_total[15m]) == 0
+        for: 15m
+        labels:
+          severity: critical
+        annotations:
+          summary: "No orders in the last 15 minutes"
+
+      - alert: HighPaymentErrorRate
+        expr: rate(ecommerce_payment_failure_total[5m]) / (rate(ecommerce_payment_failure_total[5m]) + rate(ecommerce_payment_success_total[5m])) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Payment error rate exceeds 5%"
+
+      - alert: LowStock
+        expr: ecommerce_products_low_stock > 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Some products are low in stock"
+
+      - alert: SuspiciousLoginSpikes
+        expr: increase(ecommerce_failed_logins_total[5m]) > 20
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Spike in failed logins (possible attack)"
